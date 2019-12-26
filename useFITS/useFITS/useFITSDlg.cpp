@@ -196,7 +196,7 @@ void CuseFITSDlg::OnBnClickedButton2()
 	char fits_in[1024];
 	char fits_out[1024];
 	sprintf_s(fits_in,"f_1.fits");
-	sprintf_s(fits_out,"./f_1_bak.fits");
+	sprintf_s(fits_out,"f_1_bak.fits");
 
 	CString msg(fits_in);
 	MessageBox(_T("Ready to open: ") + msg);
@@ -211,9 +211,8 @@ void CuseFITSDlg::OnBnClickedButton2()
       /* Create the output file */
       if ( !fits_create_file(&outfptr, fits_out, &status) )
       {
-		
-
-		//MessageBox(_T("Copying ") + msg + _T(" into ")+ msg2);
+		CString msg2(fits_out);
+		MessageBox(_T("Copying ") + msg + _T(" into ")+ msg2);
  
         /* copy the previous, current, and following HDUs */
         fits_copy_file(infptr, outfptr, 1, 1, 1, &status);
