@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "useFITS.h"
 #include "useFITSDlg.h"
+#include "fitsio.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -49,6 +50,7 @@ END_MESSAGE_MAP()
 CuseFITSDlg::CuseFITSDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CuseFITSDlg::IDD, pParent)
 	, m_text_fits_fname(_T(""))
+	, m_text_out_msg(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -57,6 +59,7 @@ void CuseFITSDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1, m_text_fits_fname);
+	DDX_Text(pDX, IDC_EDIT_OUT_MSG, m_text_out_msg);
 }
 
 BEGIN_MESSAGE_MAP(CuseFITSDlg, CDialog)
@@ -65,6 +68,7 @@ BEGIN_MESSAGE_MAP(CuseFITSDlg, CDialog)
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON1, &CuseFITSDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CuseFITSDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -163,7 +167,70 @@ void CuseFITSDlg::OnBnClickedButton1()
 	//	将控件内容同步到变量
 	UpdateData(TRUE);
 
-	CString str;
-	str = m_text_fits_fname;
+	CString str = _T("你输入的文件名：")+m_text_fits_fname;
 	MessageBox(str);
+}
+
+void CuseFITSDlg::OnBnClickedButton2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	//	再次确认fits文件名
+	CString str = _T("Your fits filename is: ") + m_text_fits_fname;
+	m_text_out_msg = str;
+	UpdateData(FALSE);
+
+	//int n = 0;
+	//while( n < 5 ){
+	//	CString tmp;
+	//	tmp.Format(_T("\r\n> %d"),n);
+	//	str += tmp;
+	//	m_text_out_msg = str;
+	//UpdateData(FALSE);
+	//n += 1;
+	//}
+
+	fitsfile *infptr, *outfptr;   /* FITS file pointers defined in fitsio.h */
+    int status = 0;       /* status must always be initialized = 0  */
+
+	char fits_in[1024];
+	char fits_out[1024];
+	sprintf_s(fits_in,"f_1.fits");
+	sprintf_s(fits_out,"./f_1_bak.fits");
+
+	CString msg(fits_in);
+	MessageBox(_T("Ready to open: ") + msg);
+
+
+	if ( !fits_open_file(&infptr, fits_in, READONLY, &status) )
+    {
+
+		CString msg1(fits_in);
+		MessageBox(_T("Successfully opened: ") + msg1);
+
+      /* Create the output file */
+      if ( !fits_create_file(&outfptr, fits_out, &status) )
+      {
+		
+
+		//MessageBox(_T("Copying ") + msg + _T(" into ")+ msg2);
+ 
+        /* copy the previous, current, and following HDUs */
+        fits_copy_file(infptr, outfptr, 1, 1, 1, &status);
+
+        fits_close_file(outfptr,  &status);
+      }
+	  else{
+		CString msg2(fits_out);
+		MessageBox(_T("Failed to create: ") + msg2);
+	  }
+
+      fits_close_file(infptr, &status);
+
+	} else {
+		MessageBox(_T("Failed to open: ") + msg);
+	}
+
+    /* if error occured, print out error message */
+    //if (status) fits_report_error(stderr, status);
 }
