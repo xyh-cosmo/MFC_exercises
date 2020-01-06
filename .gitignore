@@ -1,1 +1,4 @@
 Debug
+*.ncb
+*.suo
+*.aps
