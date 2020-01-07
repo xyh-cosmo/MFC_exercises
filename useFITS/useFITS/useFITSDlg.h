@@ -34,4 +34,8 @@ public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton2();
 	CString m_text_out_msg;
+
+	// 写fits文件的函数
+	void writeimage( void );
+	void printerror( int status);
 };

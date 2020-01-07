@@ -2,3 +2,5 @@ Debug
 *.ncb
 *.suo
 *.aps
+*.fit
+*.fits
