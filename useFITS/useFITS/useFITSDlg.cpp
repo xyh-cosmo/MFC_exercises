@@ -208,6 +208,9 @@ void CuseFITSDlg::OnBnClickedButton2()
 		CString msg1(fits_in);
 		MessageBox(_T("Successfully opened: ") + msg1);
 
+	/*	检查输出文件是否存在,如果存在,则移除*/
+		remove(fits_out);
+
       /* Create the output file */
       if ( !fits_create_file(&outfptr, fits_out, &status) )
       {
