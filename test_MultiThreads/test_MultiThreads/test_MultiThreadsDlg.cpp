@@ -157,10 +157,14 @@ void Ctest_MultiThreadsDlg::OnBnClickedBtnStart()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	//m_edit1_value = _T("Hello World!");
-	//UpdateData(TRUE);
+	UpdateData(TRUE);
 
-	::SetDlgItemText(AfxGetApp()->m_pMainWnd->m_hWnd, IDC_EDIT,_T("Hello World!"));
+
+	m_edit1_value = m_edit1_value + _T("\nHello World!");
+	//SetDlgItemText(IDC_EDIT,m_edit1_value);
+	UpdateData(FALSE);
+
+	//::SetDlgItemText(AfxGetApp()->m_pMainWnd->m_hWnd, IDC_EDIT,_T("Hello World!"));
 }
 
 void Ctest_MultiThreadsDlg::OnBnClickedBtnClear()

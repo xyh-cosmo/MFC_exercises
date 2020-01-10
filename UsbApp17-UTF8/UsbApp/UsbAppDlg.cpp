@@ -95,16 +95,21 @@ BOOL CUsbAppDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
     m_selectedUSBDevice = new CCyUSBDevice(this->m_hWnd, CYUSBDRV_GUID, true);
-    //this->m_btnSend.EnableWindow(FALSE);
+
+	//设置"按钮"是否可见
+    this->m_btnSend.EnableWindow(FALSE);
     #if 1
 	m_btnSend.EnableWindow(false);
 	m_btnRecv.EnableWindow(false);
 	m_btnSave.EnableWindow(false);
 	#else//for test
-	//m_btnSend.EnableWindow(true);
-	//m_btnRecv.EnableWindow(true);
-	//m_btnSave.EnableWindow(true);
+	m_btnSend.EnableWindow(true);
+	m_btnRecv.EnableWindow(true);
+	m_btnSave.EnableWindow(true);
+	m_btnNosave.EnableWindow(true);
+	m_btnRead.EnableWindow(true);
 	#endif
+
 	m_btnNosave.EnableWindow(false);
     m_edtBytesIn.SetWindowText(L"0");
     m_edtBytesOut.SetWindowText(L"0");
