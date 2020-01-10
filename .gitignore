@@ -1,7 +1,15 @@
 Debug
+*.obj
+*.manifest
+*.pch
+*.dep
+*.idb
+*.pdb
+*.res
 *.ncb
 *.suo
 *.aps
 *.fit
 *.fits
+
 */Release
