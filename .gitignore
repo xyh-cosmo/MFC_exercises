@@ -11,5 +11,6 @@ Debug
 *.aps
 *.fit
 *.fits
+*.htm
 
 */Release
