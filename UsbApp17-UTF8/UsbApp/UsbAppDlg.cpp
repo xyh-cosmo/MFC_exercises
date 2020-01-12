@@ -1719,6 +1719,10 @@ void CUsbAppDlg::OnBnClickedButtonHide()
     }
 }
 
+
+/*
+设置读取数据的块数、FPGA段RAM中数据存储的首地址（XYH@2020-01-11）
+*/
 void CUsbAppDlg::OnBnClickedButtonCmdread()
 {
 	// TODO: Add your control notification handler code here
