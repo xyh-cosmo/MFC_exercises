@@ -14,3 +14,4 @@ Debug
 *.htm
 
 */Release
+*build*
