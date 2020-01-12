@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\wangying\winpro\library\cpp\inc"
+				AdditionalIncludeDirectories="&quot;Z:\MFC_exercises\UsbApp17-UTF8\UsbApp\res\inc&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
