@@ -803,7 +803,7 @@ DWORD WINAPI CUsbAppDlg::PerformBulkTransfer(LPVOID lParam)
         CStringArray str;
         int n;
 		
-        length =  pThis->SplitString(printst, ' ',  str);		//SplitString是自定义的成员函数，非MFC提供的（added by XYH@20191219）
+        length =  pThis->SplitString(printst, ' ',  str);		//SplitString是自定义的成员函数，非MFC提供（added by XYH@20191219）
         UCHAR *bufferOutput   = new UCHAR[length + 1];
 
 	 for(int i = 0; i < length; i ++)

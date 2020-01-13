@@ -36,6 +36,7 @@
 #define IDC_BUTTON_CMDABORT             1035
 #define IDC_BUTTON1                     1036
 #define IDC_BUTTON_CMDLS                1036
+#define IDC_BUTTON_CMDLS2               1037
 #define ID_DIALOG_32771                 32771
 #define ID_DIALOG_32772                 32772
 
