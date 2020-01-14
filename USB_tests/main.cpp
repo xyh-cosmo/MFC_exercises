@@ -6,8 +6,11 @@ int main()
 {
     cout << "Hello World!" << endl;
 
-    int a = 10;
+    int a;
+
+    a = 10;
     cout << " a = " << a << endl;
+
 
     return 0;
 }
