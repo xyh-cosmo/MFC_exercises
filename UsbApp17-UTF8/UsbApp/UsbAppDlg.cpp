@@ -11,6 +11,36 @@
 #define new DEBUG_NEW
 #endif
 
+// 调用Console输出中间结果
+//#include <io.h> 
+//#include <fcntl.h>
+//void InitConsoleWindow() 
+//{ 
+//    AllocConsole(); 
+//    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE); 
+//    int hCrt = _open_osfhandle((long)handle,_O_TEXT); 
+//    FILE * hf = _fdopen( hCrt, "w" ); 
+//    *stdout = *hf; 
+//}
+
+//	测试线程使用方式是否正确
+//void ThreadTestFunc( int I ){
+//	
+////	初始化Console
+//	InitConsoleWindow();
+//
+//	int sum = 0;
+//	for( int i = 0; i<10; ++i ){
+//		sum += i;
+//		/*TRACE("==> sum(%2d) = %10d\n",i,sum);*/
+//		printf("==> sum(%2d) = %10d\n",i,sum);
+//		
+//		Sleep(1000);
+//	}
+//
+//	FreeConsole();
+//}
+
 
 // CUsbAppDlg 对话框
 
@@ -133,6 +163,8 @@ BOOL CUsbAppDlg::OnInitDialog()
 //	默认显示下方的文本编辑框（added by XYH@2020-01-14）
 	SetDlgItemText(IDC_BUTTON_HIDE, _T("隐藏显示<<"));
     SetWindowPos(NULL, 0, 0, m_RectLarge.Width(), m_RectLarge.Height(),SWP_NOMOVE|SWP_NOZORDER);
+
+
 
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -1557,7 +1589,15 @@ void CUsbAppDlg::OnBnClickedButtonSend()
 void CUsbAppDlg::OnBnClickedButtonReceive()
 {
 	// TODO: Add your control notification handler code here
-	PerformBulkRecv((LPVOID)this);
+	//PerformBulkRecv((LPVOID)this);
+
+	//	============================
+	// 以下是新版本的通过USB接受数据的代码模块
+	
+	// 0) 测试是否需要在这个时间函数内创建一个新的线程
+	Sleep(10000);
+
+	//	============================
 }
 
 void CUsbAppDlg::OnBnClickedButtonSendclear()
@@ -1572,6 +1612,26 @@ void CUsbAppDlg::OnBnClickedButtonReceiveclear()
 	// TODO: Add your control notification handler code here
 	m_recvdata = "";
 	UpdateData(false);
+
+	// 测试是否需要在这个时间函数内创建一个新的线程
+	//	结论：需要创建新的线程
+	//Sleep(10000);
+	//int t = 50000;
+	//AfxBeginThread((AFX_THREADPROC)Sleep, (LPVOID)&t);
+
+	//int I = 10;
+	//AfxBeginThread((AFX_THREADPROC)ThreadTestFunc, (LPVOID)&I);
+
+	//	==========================================
+	//	测试TRACE（需要在Debug模式下生成可执行文件）
+	int x = 1;
+	int y = 16;
+	float z = 32.0;
+	TRACE( "This is a TRACE statement\n" );
+	TRACE( "The value of x is %d\n", x );
+	TRACE( "x = %d and y = %d\n", x, y );
+	TRACE( "x = %d and y = %x and z = %f\n", x, y, z );
+	//	==========================================
 }
 
 void CUsbAppDlg::OnBnClickedButtonOutclear()
