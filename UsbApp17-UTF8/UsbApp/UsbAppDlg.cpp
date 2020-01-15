@@ -129,6 +129,11 @@ BOOL CUsbAppDlg::OnInitDialog()
     SetWindowPos(NULL,0,0,m_RectSmall.Width(),m_RectSmall.Height(),SWP_NOMOVE|SWP_NOZORDER);
 	g_cmdrecvthreadstart = false;
 	g_cmdabortflag = 0;
+
+//	默认显示下方的文本编辑框（added by XYH@2020-01-14）
+	SetDlgItemText(IDC_BUTTON_HIDE, _T("隐藏显示<<"));
+    SetWindowPos(NULL, 0, 0, m_RectLarge.Width(), m_RectLarge.Height(),SWP_NOMOVE|SWP_NOZORDER);
+
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -1559,7 +1564,7 @@ void CUsbAppDlg::OnBnClickedButtonSendclear()
 {
 	// TODO: Add your control notification handler code here
 	m_senddata.SetWindowTextW(_T(""));
-	 //AfxMessageBox(_T("按下了清除按钮"),MB_OK); // for test only
+	//AfxMessageBox(_T("按下了清除按钮"),MB_OK); // for test only
 }
 
 void CUsbAppDlg::OnBnClickedButtonReceiveclear()
