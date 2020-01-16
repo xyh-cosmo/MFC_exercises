@@ -4,6 +4,7 @@
 #pragma once
 #include "CyAPI.h"
 #include "afxwin.h"
+#include "fitsio.h"
 
 // CUsbAppDlg 对话框
 class CUsbAppDlg : public CDialog
@@ -103,4 +104,19 @@ public:
 	afx_msg void OnBnClickedButtonCmdabort();
 	CButton m_btnRead;
 	afx_msg void OnBnClickedButtonCmdls();
+
+//	############################################
+//	The following is added by XYH@2020-01-16
+public:
+	UINT PRESCAN_LEN;		// prescan的长度
+	UINT OVERSCAN_LEN;		// overscan的长度
+	UINT SAMPLE_TIMES;	// 每个像元的采样次数
+	UINT FLAG_CMD2FPGA;	// 用于记录是否已经向FPGA发送了指令，初始值设为0，表示未发送
+
+	//	指向fits文件的指针
+	fitsfile *fits_fptr;				//	初始值设为NULL
+	//	存储fits文件名
+	char *fits_filename;
+	//	存储操作fits文件时的状态
+	int fits_status;
 };

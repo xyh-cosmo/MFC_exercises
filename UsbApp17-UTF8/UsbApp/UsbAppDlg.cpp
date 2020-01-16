@@ -7,45 +7,60 @@
 #include <dbt.h>
 #include "SetParaDlg.h"
 
+//#include "fitsio.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+//################################################
 // 调用Console输出中间结果
-//#include <io.h> 
-//#include <fcntl.h>
-//void InitConsoleWindow() 
-//{ 
-//    AllocConsole(); 
-//    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE); 
-//    int hCrt = _open_osfhandle((long)handle,_O_TEXT); 
-//    FILE * hf = _fdopen( hCrt, "w" ); 
-//    *stdout = *hf; 
-//}
+#include <io.h> 
+#include <fcntl.h>
+void InitConsoleWindow() 
+{ 
+    AllocConsole(); 
+    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE); 
+    int hCrt = _open_osfhandle((long)handle,_O_TEXT); 
+    FILE * hf = _fdopen( hCrt, "w" ); 
+    *stdout = *hf; 
+}
 
 //	测试线程使用方式是否正确
-//void ThreadTestFunc( int I ){
-//	
-////	初始化Console
-//	InitConsoleWindow();
-//
-//	int sum = 0;
-//	for( int i = 0; i<10; ++i ){
-//		sum += i;
-//		/*TRACE("==> sum(%2d) = %10d\n",i,sum);*/
-//		printf("==> sum(%2d) = %10d\n",i,sum);
-//		
-//		Sleep(1000);
-//	}
-//
-//	FreeConsole();
-//}
+void ThreadTestFunc( int I ){
+	
+//	初始化Console
+	InitConsoleWindow();
 
+	int sum = 0;
+	for( int i = 0; i<10; ++i ){
+		sum += i;
+		/*TRACE("==> sum(%2d) = %10d\n",i,sum);*/
+		printf("==> sum(%2d) = %10d\n",i,sum);
+		
+		Sleep(100);
+	}
+
+	system("pause");
+	FreeConsole();
+}
+
+void print_fits_error( int status)
+{
+    /*****************************************************/
+    /* Print out cfitsio error messages and exit program */
+    /*****************************************************/
+    if (status)
+    {
+       fits_report_error(stderr, status); /* print error report */
+       exit( status );    /* terminate the program, returning error status */
+    }
+    return;
+}
+
+//	###################################################
 
 // CUsbAppDlg 对话框
-
-
-
 
 CUsbAppDlg::CUsbAppDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CUsbAppDlg::IDD, pParent)
@@ -164,7 +179,22 @@ BOOL CUsbAppDlg::OnInitDialog()
 	SetDlgItemText(IDC_BUTTON_HIDE, _T("隐藏显示<<"));
     SetWindowPos(NULL, 0, 0, m_RectLarge.Width(), m_RectLarge.Height(),SWP_NOMOVE|SWP_NOZORDER);
 
+//	初始化
+	PRESCAN_LEN = 0;		// prescan的长度
+	OVERSCAN_LEN = 0;		// overscan的长度
+	SAMPLE_TIMES = 50;	// 每个像元的采样次数
 
+//	初始化 FLAG_CMD2FPGA
+	FLAG_CMD2FPGA = 0;
+
+//	初始化与fits文件相关的变量
+	fits_fptr = NULL;				//	指向fits文件的指针，初始值设为NULL
+	fits_filename = NULL;
+	fits_status = 0;
+
+//	测试新线程
+	int tmp = 0;
+	AfxBeginThread((AFX_THREADPROC)ThreadTestFunc,(LPVOID)&tmp);
 
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -1583,19 +1613,43 @@ void CUsbAppDlg::OnBnClickedCancel()
 void CUsbAppDlg::OnBnClickedButtonSend()
 {
 	// TODO: Add your control notification handler code here
-	PerformBulkTransfer((LPVOID)this);
+	//	此处的函数名起得不好，这个事件函数的作用只是给FPGA发送指令数据包而已，未必就是通知FPGA开始传输数据
+	
+	PerformBulkTransfer((LPVOID)this);	//	发送指令给FPGA
+
+	//	修改 FLAG_CMD2FPGA 的值：0表示指令未发送，1表示指令已经发送
+	FLAG_CMD2FPGA = 1;
 }
 
 void CUsbAppDlg::OnBnClickedButtonReceive()
 {
 	// TODO: Add your control notification handler code here
-	//PerformBulkRecv((LPVOID)this);
+	PerformBulkRecv((LPVOID)this);
 
 	//	============================
 	// 以下是新版本的通过USB接受数据的代码模块
 	
-	// 0) 测试是否需要在这个时间函数内创建一个新的线程
-	Sleep(10000);
+	if( FLAG_CMD2FPGA != 1 ){
+		AfxMessageBox(_T("还未向FPGA发送\"数据传输\"指令！"));
+		return;
+	} 
+	
+	//	通过检查指向fits文件的指针来检查fits文件名
+	if( fits_fptr != NULL ){
+		CString msg;
+		msg.Format(_T("Fits文件：%s 已经存在！"), fits_filename);
+		AfxMessageBox(msg);	//	提示fits文件已经存在
+		// 关闭已经打开的fits文件并将fits_fptr设为NULL
+		fits_close_file( fits_fptr, &fits_status );
+		fits_fptr = NULL;
+	}
+
+	// 打开创建新的fits文件
+	if( fits_open_file( &fits_fptr, fits_filename, READWRITE, &fits_status) ){
+		print_fits_error( fits_status );
+	}
+
+	// 计数器
 
 	//	============================
 }
