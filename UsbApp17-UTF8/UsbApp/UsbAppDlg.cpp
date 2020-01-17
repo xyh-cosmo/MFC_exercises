@@ -45,6 +45,26 @@ void ThreadTestFunc( int I ){
 	FreeConsole();
 }
 
+void PrintDebugMsg(  WCHAR *msg ){
+//	初始化Console
+	InitConsoleWindow();
+	CString _msg(msg);
+
+	int msg_size = _msg.GetLength();
+	char *__msg = new char[msg_size];
+	for( int i=0; i<msg_size; ++i ){
+		__msg[i] = msg[i];
+	}
+
+	printf("==> debug message: %s\n", __msg);
+	//printf("==> debug message: %s\n", msg);
+
+	system("pause");
+	FreeConsole();
+
+	delete[] __msg;
+}
+
 void print_fits_error( int status)
 {
     /*****************************************************/
@@ -193,8 +213,8 @@ BOOL CUsbAppDlg::OnInitDialog()
 	fits_status = 0;
 
 //	测试新线程
-	int tmp = 0;
-	AfxBeginThread((AFX_THREADPROC)ThreadTestFunc,(LPVOID)&tmp);
+	//int tmp = 0;
+	//AfxBeginThread((AFX_THREADPROC)ThreadTestFunc,(LPVOID)&tmp);
 
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -650,6 +670,8 @@ void CUsbAppDlg::DataSaveToFile(const CString str, PUCHAR buf, int bCnt)
     }
 }
 
+// ####################################################
+// 计算校验和
 UINT CUsbAppDlg::DataSumGet(PUCHAR buf)
 {
     UINT checksum = 0;
@@ -1035,6 +1057,7 @@ DWORD WINAPI CUsbAppDlg::CommandOne(LPVOID lParam)
     return 0;
 }
 
+//	#############################################################
 BOOL CUsbAppDlg::DataRecvRes(CCyUSBEndPoint *epBulkOut)
 {
 	ULONG m_nSuccess = 0;
@@ -1114,6 +1137,7 @@ BOOL CUsbAppDlg::DataRecvRes(CCyUSBEndPoint *epBulkOut)
 	return 0;
 }
 
+//	#############################################################
 DWORD WINAPI CUsbAppDlg::CommandLinkStatus(LPVOID lParam)
 {
     ULONG m_nSuccess = 0;
@@ -1197,6 +1221,8 @@ DWORD WINAPI CUsbAppDlg::CommandLinkStatus(LPVOID lParam)
     return 0;
 }
 
+
+//	#############################################################
 DWORD WINAPI CUsbAppDlg::CommandResetFpga(LPVOID lParam)
 {
     ULONG m_nSuccess = 0;
@@ -1280,9 +1306,13 @@ DWORD WINAPI CUsbAppDlg::CommandResetFpga(LPVOID lParam)
     return 0;
 }
 
+
+//	#############################################################
 DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
 //DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam, const CString str, PUCHAR buf, int bCnt)
 {
+
+	//PrintDebugMsg(L"calling CommandRead ...");
 
     ULONG m_nSuccess = 0;
     ULONG m_nFailure = 0;
@@ -1306,8 +1336,14 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
 	bufferOutput[5] = (pThis->g_cmdreadblkcounter >> 8) & 0xff;
 	bufferOutput[6] = 0x0;
 	bufferOutput[7] = 0x0;
-	
-//	AfxMessageBox(pThis->g_cmdreadAddr,MB_OK | MB_ICONINFORMATION);
+
+	for( int j=0; j<8; j++ ){
+		//printf("%s\n", bufferOutput[j]);
+		TRACE("==> Send: %d\n",bufferOutput[j]);
+	}
+
+//	显示输入的内存地址
+	//AfxMessageBox(pThis->g_cmdreadAddr,MB_OK | MB_ICONINFORMATION);
 	
 	cmdReadAddr = wcstol((pThis->g_cmdreadAddr), NULL, 16);
 
@@ -1346,6 +1382,7 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
     {
     
         pThis->m_btnRead.EnableWindow(true);
+		AfxMessageBox(_T("错误：pThis->m_cboEndpointOUT.GetCount() == 0"),MB_OK | MB_ICONINFORMATION);
 	    return 0;
     }
 #endif
@@ -1360,8 +1397,12 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
     // Extract the endpoint addresses........
     strOutData = strOutData.Right(4);
 	
+	 // 将地址转换成16进制
     outEpAddress = (BYTE)wcstoul(strOutData.GetBuffer(0), &pEnd, 16);
+	
+	//	根据地址获取EndPoint
     CCyUSBEndPoint *epBulkOut = pThis->m_selectedUSBDevice->EndPointOf(outEpAddress);
+
 #if 1
     if(epBulkOut == NULL)
     {
@@ -1391,8 +1432,10 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
 			pThis->g_cmdabortflag = 0;
             break;
 		}
-#endif		
+#endif	
+
 		PerformBulkRecv((LPVOID)pThis);
+
 #if 0
 	    while((pThis->g_cmdreadCompeletedflag !=1)&&(pThis->g_cmdabortflag == 0))
 	    {
@@ -1404,6 +1447,7 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
 			pThis->DataRecvRes(epBulkOut);
 		}
 	}
+
     if(i >= pThis->g_cmdreadblkcounter)
 	{
 	    AfxMessageBox(_T("数据传输完成"),MB_OK | MB_ICONINFORMATION);
@@ -1481,13 +1525,16 @@ DWORD WINAPI CUsbAppDlg::CommandRecv(LPVOID lParam)
     return 0;
 }
 
+//	############################################################
+//	这是真正的通过USB接收数据的函数
 DWORD WINAPI CUsbAppDlg::PerformBulkRecv(LPVOID lParam)
 {
     ULONG m_nSuccess = 0;
     ULONG m_nFailure = 0;
     CUsbAppDlg *pThis = (CUsbAppDlg *)lParam;
 
-    if (pThis->m_cboEndpointIN.GetCount() == 0) //判断输入端点是否正常（added by XYH@20191219)
+	//判断输入端点是否正常（added by XYH@20191219)
+    if (pThis->m_cboEndpointIN.GetCount() == 0) 
     {
 	    return 0; //test delete
     }
@@ -1498,24 +1545,27 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv(LPVOID lParam)
     BYTE inEpAddress = 0x0;
     pThis->m_cboEndpointIN.GetWindowText(strINData);
 
+	// 这里获取EndPoint地址的操作是不是重复多余了？
     // Extract the endpoint addresses........
     strINData = strINData.Right(4);
 
     inEpAddress = (BYTE)wcstoul(strINData.GetBuffer(0), &pEnd, 16);
     CCyUSBEndPoint *epBulkIn = pThis->m_selectedUSBDevice->EndPointOf(inEpAddress);
+
+	// 读取数据的长度
 	long readLength = 16*1024;
-       UCHAR *buffersInput = new UCHAR[readLength];	
+    UCHAR *buffersInput = new UCHAR[readLength];	
 //	buffersInput[0] = new UCHAR[readLength];
 	memset(buffersInput,0x0,readLength);	  
 
 #if 1
     //while(1)
     {
+		// 此前已经通知FPGA准备好数据了？？？
 		if(epBulkIn->XferData(buffersInput, readLength))
 		{
 		   m_nSuccess ++;
     //	   AfxMessageBox(_T("接收完成"),MB_OK | MB_ICONINFORMATION);
-
 		}
 		else
 		{
@@ -1572,7 +1622,8 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv(LPVOID lParam)
    }
    
     pThis->DisplayXferData(buffersInput,readLength,true);
-#endif   
+#endif
+
     if(!pThis->FileName.IsEmpty())
     {
 		pThis->DataSaveToFile(pThis->FileName, buffersInput,readLength);
@@ -1590,6 +1641,7 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv(LPVOID lParam)
 
     return 0;
 }
+
 void CUsbAppDlg::OnBnClickedCancel()
 {
     // TODO: Add your control notification handler code here
