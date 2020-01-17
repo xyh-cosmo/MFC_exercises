@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;;&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\inc&quot;"
+				AdditionalIncludeDirectories="&quot;D:\Workspace\Git\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;;&quot;D:\Workspace\Git\MFC_exercises\UsbApp17-UTF8\UsbApp\res\inc&quot;;&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;;&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\inc&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -70,7 +70,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="setupapi.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;"
+				AdditionalLibraryDirectories="&quot;D:\Workspace\Git\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;;&quot;D:\Workspace\Git\MFC_exercises\UsbApp17-UTF8\UsbApp\res\lib\x86&quot;;&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;"
 				IgnoreDefaultLibraryNames="LIBC; LIBCMT"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -238,10 +238,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\res\inc\CyAPI.h"
-				>
-			</File>
 			<File
 				RelativePath=".\res\cfitsio_MSVC_32bit_DLL_3370\fitsio.h"
 				>
