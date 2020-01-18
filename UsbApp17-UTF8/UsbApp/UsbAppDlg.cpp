@@ -14,7 +14,7 @@
 #endif
 
 //################################################
-// 调用Console输出中间结果
+// 调用Console输出中间结果（debug时使用）
 #include <io.h> 
 #include <fcntl.h>
 void InitConsoleWindow() 
@@ -29,8 +29,7 @@ void InitConsoleWindow()
 //	测试线程使用方式是否正确
 void ThreadTestFunc( int I ){
 	
-//	初始化Console
-	InitConsoleWindow();
+	InitConsoleWindow();	//	初始化Console
 
 	int sum = 0;
 	for( int i = 0; i<10; ++i ){
