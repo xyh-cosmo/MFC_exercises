@@ -1,6 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void my_itoa( int num, char str[], unsigned int radix){
+
+    switch (radix) {
+    case 16:
+        sprintf(str,"%x",num);
+        break;
+    case 8:
+        sprintf(str,"%o",num);
+        break;
+    case 2:
+        sprintf(str,"%b",num);
+        break;
+    default:
+        printf(" Wrong radix: %d", radix);
+        break;
+    }
+}
+
 int main( int argc, char *argv[] ){
 
 //  ###############################################################################
@@ -9,7 +27,7 @@ int main( int argc, char *argv[] ){
 //    double doubleType;
 //    char charType;
 
-    //  sizeof ²Ù×÷·ûÓÃÓÚ¼ÆËã±äÁ¿µÄ×Ö½Ú´óĞ¡
+    //  sizeof æ“ä½œç¬¦ç”¨äºè®¡ç®—å˜é‡çš„å­—èŠ‚å¤§å°
 //    printf("Size of int:    %ld bytes\n", sizeof(integerType));
 //    printf("Size of float:  %ld bytes\n", sizeof(floatType));
 //    printf("Size of double: %ld bytes\n", sizeof(doubleType));
@@ -17,24 +35,25 @@ int main( int argc, char *argv[] ){
 //  ###############################################################################
 
 //  ###############################################################################
-//  Êä³ö¶ş½øÖÆ£¬Ğèµ÷ÓÃchar*itoa(int value,char*string,int radix)½«Êı×Ö×ª»»³É×Ö·û´®
+//  è¾“å‡ºäºŒè¿›åˆ¶ï¼Œéœ€è°ƒç”¨char*itoa(int value,char*string,int radix)å°†æ•°å­—è½¬æ¢æˆå­—ç¬¦ä¸²
+//  æ‹“å±•ï¼šä¸åŒè¿›åˆ¶çš„æ•°å¦‚ä½•æ˜¾å¼åœ°è¡¨ç¤ºï¼Œä¾‹å¦‚16è¿›åˆ¶çš„å‰ç¼€ä¸ºâ€œ0Xâ€
     int a = 0x7fffffe;
     char s16[128]="";
     char s8[128]="";
     char s2[128]="";
 
-    itoa(a,s16,16);
-    itoa(a,s8,8);
-    itoa(a,s2,2);
+    my_itoa(a,s16,16);
+    my_itoa(a,s8,8);
+    my_itoa(a,s2,2);
 
-    printf("== Ö±½ÓÊä³öÊıÖµ½á¹û ==\n");
-    printf("10½øÖÆÊıÖµ£º %d\n", a);
-    printf("16½øÖÆÊıÖµ£º %x\n", a);
+    printf("== ç›´æ¥è¾“å‡ºæ•°å€¼ç»“æœ ==\n");
+    printf("10è¿›åˆ¶æ•°å€¼ï¼š %d\n", a);
+    printf("16è¿›åˆ¶æ•°å€¼ï¼š %x\n", a);
 
-    printf("== Êä³ö×ª»»ºóµÄ×Ö·û ==\n");
-    printf("16½øÖÆ:   %s\n",s16);
-    printf("8½øÖÆ:    %s\n",s8);
-    printf("2½øÖÆ:    %s\n",s2);
+    printf("== è¾“å‡ºè½¬æ¢åçš„å­—ç¬¦ ==\n");
+    printf("16è¿›åˆ¶:   %s\n",s16);
+    printf("8è¿›åˆ¶:    %s\n",s8);
+    printf("2è¿›åˆ¶:    %s\n",s2);
 //  ###############################################################################
 
     return 0;
