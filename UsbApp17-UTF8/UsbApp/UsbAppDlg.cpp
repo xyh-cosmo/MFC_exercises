@@ -278,7 +278,10 @@ BOOL CUsbAppDlg::SurveyExistingDevices()
         {
             CString strDeviceData;
             USBDevice->Open(nCount);
-            strDeviceData.Format(L"(0x%04X - 0x%04X) %s", USBDevice->VendorID, USBDevice->ProductID, CString(USBDevice->FriendlyName));
+            strDeviceData.Format(L"(0x%04X - 0x%04X) %s", 
+								USBDevice->VendorID, 
+								USBDevice->ProductID, 
+								CString(USBDevice->FriendlyName));
             m_cboDevices.InsertString(nInsertionCount++, strDeviceData);
             if (nCboIndex == -1 && strDevice.IsEmpty() == FALSE && strDevice == strDeviceData ) 
                 nCboIndex = nCount;
@@ -1835,7 +1838,9 @@ void CUsbAppDlg::OnDialogCommon()
 {
 	// TODO: Add your command handler code here
 	g_onlydata = false;
-	CFileDialog dlgFile(TRUE/*FALSE*/, NULL/*_T("*.txt")*/, NULL, OFN_HIDEREADONLY, _T("All Files(*.*)|*.*||")/*_T("Describe File(*.txt)|*.txt|All Files(*.*)|*.*||")*/, NULL);
+	CFileDialog dlgFile(TRUE/*FALSE*/, NULL/*_T("*.txt")*/, 
+						NULL, OFN_HIDEREADONLY, 
+						_T("All Files(*.*)|*.*||")/*_T("Describe File(*.txt)|*.txt|All Files(*.*)|*.*||")*/, NULL);
 	if (IDOK == dlgFile.DoModal())
 	{
 		FileName = dlgFile.GetPathName();		
@@ -1852,7 +1857,9 @@ void CUsbAppDlg::OnDialogOnlyData()
 {
 	// TODO: Add your command handler code here
 	g_onlydata = true;
-	CFileDialog dlgFile(TRUE/*FALSE*/, NULL/*_T("*.txt")*/, NULL, OFN_HIDEREADONLY, _T("All Files(*.*)|*.*||")/*_T("Describe File(*.txt)|*.txt|All Files(*.*)|*.*||")*/, NULL);
+	CFileDialog dlgFile(TRUE/*FALSE*/, NULL/*_T("*.txt")*/, 
+						NULL, OFN_HIDEREADONLY, 
+						_T("All Files(*.*)|*.*||")/*_T("Describe File(*.txt)|*.txt|All Files(*.*)|*.*||")*/, NULL);
 	if (IDOK == dlgFile.DoModal())
 	{
 		FileName = dlgFile.GetPathName();		
