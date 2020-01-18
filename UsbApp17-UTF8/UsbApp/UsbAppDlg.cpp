@@ -26,6 +26,7 @@ void InitConsoleWindow()
     *stdout = *hf; 
 }
 
+//################################################
 //	测试线程使用方式是否正确
 void ThreadTestFunc( int I ){
 	
@@ -1311,6 +1312,7 @@ DWORD WINAPI CUsbAppDlg::CommandResetFpga(LPVOID lParam)
 
 // #############################################################
 // 这个函数才是真正的给FPGA发送指令的地儿
+// 这个函数需要与接受数据里的事件函数结合起来，做成自动化的
 DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
 //DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam, const CString str, PUCHAR buf, int bCnt)
 {
@@ -1902,7 +1904,6 @@ void CUsbAppDlg::OnBnClickedButtonHide()
 
 /*
 设置读取数据的块数、FPGA段RAM中数据存储的首地址（XYH@2020-01-11）
- 这个函数需要与接受数据里的事件函数结合起来，做成自动化的
 */
 void CUsbAppDlg::OnBnClickedButtonCmdread()
 {
