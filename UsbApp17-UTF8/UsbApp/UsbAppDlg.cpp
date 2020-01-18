@@ -1384,6 +1384,7 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
     
         pThis->m_btnRead.EnableWindow(true);
 		AfxMessageBox(_T("错误：pThis->m_cboEndpointOUT.GetCount() == 0"),MB_OK | MB_ICONINFORMATION);
+		delete [] bufferOutput;
 	    return 0;
     }
 #endif
@@ -1408,6 +1409,7 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
     if(epBulkOut == NULL)
     {
         pThis->m_btnRead.EnableWindow(true);
+		delete [] bufferOutput;
         return 1;
     }
 #endif
