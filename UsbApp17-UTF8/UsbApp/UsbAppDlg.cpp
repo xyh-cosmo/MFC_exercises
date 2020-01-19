@@ -1332,31 +1332,35 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
 
 	pThis->g_cmdreadCompeletedflag = 0;
 
+//	CMD0:7f ff ff fe
 	bufferOutput[0] = 0xfe;
 	bufferOutput[1] = 0xff;
 	bufferOutput[2] = 0xff;
 	bufferOutput[3] = 0x7f;
 
+//	CMD1:命令字
 	bufferOutput[4] = pThis->g_cmdreadblkcounter & 0xff;
 	bufferOutput[5] = (pThis->g_cmdreadblkcounter >> 8) & 0xff;
 	bufferOutput[6] = 0x0;
 	bufferOutput[7] = 0x0;
 
-	for( int j=0; j<8; j++ ){
-		//printf("%s\n", bufferOutput[j]);
-		TRACE("==> Send: %d\n",bufferOutput[j]);
-	}
+	//for( int j=0; j<8; j++ ){
+	//	//printf("%s\n", bufferOutput[j]);
+	//	TRACE("==> Send: %d\n",bufferOutput[j]);
+	//}
 
 //	显示输入的内存地址
 	//AfxMessageBox(pThis->g_cmdreadAddr,MB_OK | MB_ICONINFORMATION);
 	
 	cmdReadAddr = wcstol((pThis->g_cmdreadAddr), NULL, 16);
 
+//	CMD1:参数1
 	bufferOutput[8] = cmdReadAddr & 0xff;
 	bufferOutput[9] = (cmdReadAddr >> 8) & 0xff;
 	bufferOutput[10] = (cmdReadAddr >> 16) & 0xff;
 	bufferOutput[11] = (cmdReadAddr >> 24) & 0x3f;
 
+//	CMD1:参数2
 	bufferOutput[12] = 0x0;
 	bufferOutput[13] = 0x0;
 	bufferOutput[14] = 0x0;
@@ -1364,37 +1368,61 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
 
 	dataCheckSum = pThis->DataSumGet(&(bufferOutput[4]));
 
-
+//	CMD1:校验和
 	bufferOutput[16] = dataCheckSum & 0xff;
 	bufferOutput[17] = (dataCheckSum >> 8) & 0xff;
 	bufferOutput[18] = (dataCheckSum >> 16) & 0xff;
 	bufferOutput[19] = (dataCheckSum >> 24) & 0xff;
-	//bufferOutput[length] = '\0';
-    TRACE("Send: %d\n",bufferOutput[0]);
-    TRACE("Send: %d\n",bufferOutput[4]);
-    TRACE("Send: %d\n",bufferOutput[5]);
-    TRACE("Send: %d\n",bufferOutput[8]);
-    TRACE("Send: %d\n",bufferOutput[9]);
-    TRACE("Send: %d\n",bufferOutput[10]);
-    TRACE("Send: %d\n",bufferOutput[11]);
-    TRACE("Send: %d\n",bufferOutput[16]);
-    TRACE("Send: %d\n",bufferOutput[17]);
-    TRACE("Send: %d\n",bufferOutput[18]);
-    TRACE("Send: %d\n",bufferOutput[19]);
+
+	//bufferOutput[length] = '\0';	//这是否必要?
+
+    //TRACE("Send: bufferOutput[%d] = %d\n",0,bufferOutput[0]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",4,bufferOutput[4]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",5,bufferOutput[5]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",8,bufferOutput[8]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",9,bufferOutput[9]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",10,bufferOutput[10]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",11,bufferOutput[11]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",16,bufferOutput[16]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",17,bufferOutput[17]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",18,bufferOutput[18]);
+    //TRACE("Send: bufferOutput[%d] = %d\n",19,bufferOutput[19]);
+
+	/*TRACE("Send: %s\n",bufferOutput);*/
+//	#########################################################################
+//	这段代码仅作测试使用
+	InitConsoleWindow();	//	初始化Console
+	
+	for( int ii=0; ii < 5; ii++ ){
+		//printf("Send: %d, ***, %c\n",bufferOutput[ii], bufferOutput[ii]);
+		printf("PC> 发送读取数据指令给FPGA，等待FPGA的相应和发送数据...\n");
+		Sleep(200);
+		printf("PC> 接收从FPGA发送过来的数据...\n");
+		Sleep(200);
+		printf("PC> 提取图像数据、格式转换...\n");
+		Sleep(200);
+	}
+
+	system("pause");
+	FreeConsole();
+//	#########################################################################
 
 #if 1
-    if(pThis->m_cboEndpointOUT.GetCount() == 0) 
+//	检测是否有USB设备连接成功
+	if(pThis->m_cboEndpointOUT.GetCount() == 0) 
     {
     
         pThis->m_btnRead.EnableWindow(true);
-		AfxMessageBox(_T("错误：pThis->m_cboEndpointOUT.GetCount() == 0"),MB_OK | MB_ICONINFORMATION);
+		//AfxMessageBox(_T("错误：pThis->m_cboEndpointOUT.GetCount() == 0"),MB_OK | MB_ICONINFORMATION);
+		AfxMessageBox(_T("错误：没有找到连接的USB设备！"),MB_OK | MB_ICONINFORMATION);
 		delete [] bufferOutput;
 	    return 0;
     }
 #endif
+
     pThis->m_cboEndpointOUT.EnableWindow(FALSE);
 
-    CString strOutData;
+    CString strOutData;	//用于获取EndPoint地址
     TCHAR *pEnd;
    // BYTE outEpAddress = 0x0;
     BYTE outEpAddress = 0x0;
