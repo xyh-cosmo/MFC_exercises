@@ -64,10 +64,13 @@ private:
 	static DWORD WINAPI CommandRecv(LPVOID lParam);
 	static DWORD WINAPI PerformBulkRecv(LPVOID lParam);
 
-//	#########################################################
-//	新增的接收数据函数，每次按照固定大小（16K）接收数据
-//	#########################################################
-	static DWORD WINAPI PerformBulkRecv(LPVOID lParam, UCHAR *bufferReceived, long readLength);
+//	###########################################################################################
+//	以下这些新增的函数可以在新创建的线程中执行
+//	新增的接收数据函数，每次按照固定大小（16K）接收数据，这是Kernel部分
+	static DWORD WINAPI PerformBulkRecv_Kernel(LPVOID lParam, UCHAR *bufferReceived, long readLength);
+//	新增的“接收数据”事件函数的driver部分(by XYH @2020-01-20)
+	static DWORD WINAPI PerformBulkRecv_Driver( LPVOID lParam );
+//	###########################################################################################
 
 	CComboBox m_cboDevices;
 	CComboBox m_cboEndpointIN;
@@ -110,6 +113,7 @@ public:
 	afx_msg void OnBnClickedButtonCmdabort();
 	CButton m_btnRead;
 	afx_msg void OnBnClickedButtonCmdls();
+
 
 //	############################################
 //	The following is added by XYH@2020-01-16

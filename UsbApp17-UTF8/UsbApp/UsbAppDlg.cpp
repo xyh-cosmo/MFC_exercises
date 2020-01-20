@@ -1647,34 +1647,9 @@ void CUsbAppDlg::OnBnClickedButtonSend()
 void CUsbAppDlg::OnBnClickedButtonReceive()
 {
 	// TODO: Add your control notification handler code here
-	PerformBulkRecv((LPVOID)this);
+	//PerformBulkRecv((LPVOID)this);
 
-	//	============================
-	// 以下是新版本的通过USB接受数据的代码模块
-	
-	//if( FLAG_CMD2FPGA != 1 ){
-	//	AfxMessageBox(_T("还未向FPGA发送\"数据传输\"指令！"));
-	//	return;
-	//} 
-	
-	//	通过检查指向fits文件的指针来检查fits文件名
-	//if( fits_fptr != NULL ){
-	//	CString msg;
-	//	msg.Format(_T("Fits文件：%s 已经存在！"), fits_filename);
-	//	AfxMessageBox(msg);	//	提示fits文件已经存在
-	//	// 关闭已经打开的fits文件并将fits_fptr设为NULL
-	//	fits_close_file( fits_fptr, &fits_status );
-	//	fits_fptr = NULL;
-	//}
-
-	// 打开创建新的fits文件
-	//if( fits_open_file( &fits_fptr, fits_filename, READWRITE, &fits_status) ){
-	//	print_fits_error( fits_status );
-	//}
-
-	// 计数器
-
-	//	============================
+	AfxBeginThread((AFX_THREADPROC)PerformBulkRecv_Driver, (LPVOID)this);
 }
 
 void CUsbAppDlg::OnBnClickedButtonSendclear()
