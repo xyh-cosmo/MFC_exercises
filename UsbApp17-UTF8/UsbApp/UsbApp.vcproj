@@ -201,6 +201,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\new.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SetParaDlg.cpp"
 				>
 			</File>

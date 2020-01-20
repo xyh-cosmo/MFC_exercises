@@ -13,71 +13,6 @@
 #define new DEBUG_NEW
 #endif
 
-//################################################
-// 调用Console输出中间结果（debug时使用）
-#include <io.h> 
-#include <fcntl.h>
-void InitConsoleWindow() 
-{ 
-    AllocConsole(); 
-    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE); 
-    int hCrt = _open_osfhandle((long)handle,_O_TEXT); 
-    FILE * hf = _fdopen( hCrt, "w" ); 
-    *stdout = *hf; 
-}
-
-//################################################
-//	测试线程使用方式是否正确
-void ThreadTestFunc( int I ){
-	
-	InitConsoleWindow();	//	初始化Console
-
-	int sum = 0;
-	for( int i = 0; i<10; ++i ){
-		sum += i;
-		/*TRACE("==> sum(%2d) = %10d\n",i,sum);*/
-		printf("==> sum(%2d) = %10d\n",i,sum);
-		
-		Sleep(100);
-	}
-
-	system("pause");
-	FreeConsole();
-}
-
-void PrintDebugMsg(  WCHAR *msg ){
-//	初始化Console
-	InitConsoleWindow();
-	CString _msg(msg);
-
-	int msg_size = _msg.GetLength();
-	char *__msg = new char[msg_size];
-	for( int i=0; i<msg_size; ++i ){
-		__msg[i] = msg[i];
-	}
-
-	printf("==> debug message: %s\n", __msg);
-	//printf("==> debug message: %s\n", msg);
-
-	system("pause");
-	FreeConsole();
-
-	delete[] __msg;
-}
-
-void print_fits_error( int status)
-{
-    /*****************************************************/
-    /* Print out cfitsio error messages and exit program */
-    /*****************************************************/
-    if (status)
-    {
-       fits_report_error(stderr, status); /* print error report */
-       exit( status );    /* terminate the program, returning error status */
-    }
-    return;
-}
-
 //	###################################################
 
 // CUsbAppDlg 对话框
@@ -1561,7 +1496,8 @@ DWORD WINAPI CUsbAppDlg::CommandRecv(LPVOID lParam)
 }
 
 //	############################################################
-//	这是真正的通过USB接收数据的函数
+//	这是真正的通过USB接收数据的函数，需要以此为基础再写一个新版本，然后
+//	嵌入到“接收数据”的事件函数中
 DWORD WINAPI CUsbAppDlg::PerformBulkRecv(LPVOID lParam)
 {
     ULONG m_nSuccess = 0;
@@ -1705,7 +1641,7 @@ void CUsbAppDlg::OnBnClickedButtonSend()
 	PerformBulkTransfer((LPVOID)this);	//	发送指令给FPGA
 
 	//	修改 FLAG_CMD2FPGA 的值：0表示指令未发送，1表示指令已经发送
-	FLAG_CMD2FPGA = 1;
+	//FLAG_CMD2FPGA = 1;
 }
 
 void CUsbAppDlg::OnBnClickedButtonReceive()

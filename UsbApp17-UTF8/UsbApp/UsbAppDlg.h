@@ -63,6 +63,12 @@ private:
 	static DWORD WINAPI CommandResetFpga(LPVOID lParam);	
 	static DWORD WINAPI CommandRecv(LPVOID lParam);
 	static DWORD WINAPI PerformBulkRecv(LPVOID lParam);
+
+//	#########################################################
+//	新增的接收数据函数，每次按照固定大小（16K）接收数据
+//	#########################################################
+	static DWORD WINAPI PerformBulkRecv(LPVOID lParam, UCHAR *bufferReceived, long readLength);
+
 	CComboBox m_cboDevices;
 	CComboBox m_cboEndpointIN;
 	CComboBox m_cboEndpointOUT;
@@ -120,3 +126,6 @@ public:
 	//	存储操作fits文件时的状态
 	int fits_status;
 };
+
+//	一些额外的函数，用于调试（added by XYH@2020-01-19）
+void InitConsoleWindow();	// 调用Console输出中间结果（debug时使用）
