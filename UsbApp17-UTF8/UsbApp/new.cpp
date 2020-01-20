@@ -191,6 +191,7 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 //	进入循环：
 //	=========
 
+	printf("==> entering into the while-loop\n");
 	while(1){
 
 		//	1）给FPGA发送读数据指令
@@ -205,14 +206,16 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 
 		//	2）PC收数据，解包
 		TRACE("**> waiting FPGA to send data ...\n");
+		printf("**> waiting FPGA to send data ...\n");
 		Sleep(500);
 		//PerformBulkRecv_Kernel( lParam, bufferReceived, readLength );
 
 		//	3) 
 		
 		//	根据相关条件来判断是否终止接收数据，暂时用一个简单的计数器替代
-		if( counter >= 10 ){
+		if( counter >= 30 ){
 			TRACE("==> finished 10 data transfers\n");
+			printf("==> finished 10 data transfers\n");
 			delete[] bufferReceived;
 			break;
 		}
@@ -220,6 +223,7 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 			counter += 1;
 
 		TRACE("**> sleep for 0.5 secs ...\n");
+		printf("**> sleep for 0.5 secs ...\n");
 		Sleep(500);
 	}
 
