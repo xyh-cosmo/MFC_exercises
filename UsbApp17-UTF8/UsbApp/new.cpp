@@ -9,6 +9,18 @@
 #include <dbt.h>
 #include "SetParaDlg.h"
 
+//##################################################
+//	若要开启将数据保存至文件的功能，取消下面的宏定义注释
+//#ifndef _ENABLE_SAVE_FILE_
+//#define _ENABLE_SAVE_FILE_
+//#endif
+
+//##################################################
+//	若要开启consloe显示debug信息的功能，取消下面的注释
+#ifndef _ENABLE_CONSOLE_DEBUG_
+#define _ENABLE_CONSOLE_DEBUG_
+#endif
+
 //#include "fitsio.h"
 
 //################################################
@@ -85,9 +97,8 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Kernel(LPVOID lParam, UCHAR *bufferRece
     ULONG m_nFailure = 0;
     CUsbAppDlg *pThis = (CUsbAppDlg *)lParam;
 
-    if (pThis->m_cboEndpointIN.GetCount() == 0) {
-	//	判断输入端点是否正常（added by XYH@20191219)
-	    return 0; //test delete
+    if (pThis->m_cboEndpointIN.GetCount() == 0) { //	判断输入端点是否正常（added by XYH@20191219)
+	    return 0;
     }
 
     pThis->m_cboEndpointIN.EnableWindow(FALSE);
@@ -96,18 +107,18 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Kernel(LPVOID lParam, UCHAR *bufferRece
     BYTE inEpAddress = 0x0;
     pThis->m_cboEndpointIN.GetWindowText(strINData);
 
-	// 这里获取EndPoint地址的操作是不是重复多余了？
-    // Extract the endpoint addresses........
-    strINData = strINData.Right(4);
+	strINData = strINData.Right(4);				// Extract the endpoint addresses，这个操作是不是多余了？
 
     inEpAddress = (BYTE)wcstoul(strINData.GetBuffer(0), &pEnd, 16);
     CCyUSBEndPoint *epBulkIn = pThis->m_selectedUSBDevice->EndPointOf(inEpAddress);
 
-	memset(bufferReceived,0x0,readLength);	  //readLength = 16*1024为每次读取数据的长度
+	memset(bufferReceived,0x0,readLength);		// readLength = 16*1024为每次读取数据的长度
 
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 此前已经通知FPGA准备好数据了？？？
 	// 刘工对此的解释是：“FPGA控制USB发送数据后，数据实际已经发送到PC端的某个缓存中，PC端只需通过相关API
 	// 将数据提取出来即可”
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	if(epBulkIn->XferData(bufferReceived, readLength))
 	{
 		m_nSuccess ++;
@@ -147,16 +158,20 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Kernel(LPVOID lParam, UCHAR *bufferRece
     return 0;
 }
 
-//	“接收数据”事件函数的“核心”
+//	===========================================================================
+//	“接收数据”事件函数的“驱动”，在“接收数据”按钮的事件函数内部的新建线程内工作
+//	该函数是真正的“指令发送”、“数据接收”的控制中心，在其内部包含了完整的流程（除去开机时
+//	的自动配置）
 DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 
+#if defined(_ENABLE_CONSOLE_DEBUG_)
 	//	开启Console窗口用于显示调试信息
 	InitConsoleWindow();
 
 	//	打印当前的调用信息，然后等待
 	printf("==> New thread calling of: PerformBulkRecv_Driver\n");
 	system("pause");
-
+#endif
 	
 
 	CUsbAppDlg *pThis = (CUsbAppDlg *)lParam;
@@ -215,7 +230,9 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 		//	根据相关条件来判断是否终止接收数据，暂时用一个简单的计数器替代
 		if( counter >= 30 ){
 			TRACE("==> finished 10 data transfers\n");
+#if defined(_ENABLE_CONSOLE_DEBUG_)
 			printf("==> finished 10 data transfers\n");
+#endif
 			delete[] bufferReceived;
 			break;
 		}
@@ -223,13 +240,17 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 			counter += 1;
 
 		TRACE("**> sleep for 0.5 secs ...\n");
+#if defined(_ENABLE_CONSOLE_DEBUG_)
 		printf("**> sleep for 0.5 secs ...\n");
+#endif
 		Sleep(500);
 	}
 
 	//	关闭调试用的Console窗口
+#if defined(_ENABLE_CONSOLE_DEBUG_)
 	system("pause");
 	FreeConsole();
+#endif
 
 	return 0;
 }
