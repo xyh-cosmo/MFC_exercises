@@ -120,8 +120,8 @@ public:
 public:
 	UINT PRESCAN_LEN;		// prescan的长度
 	UINT OVERSCAN_LEN;		// overscan的长度
-	UINT SAMPLE_TIMES;	// 每个像元的采样次数
-	UINT FLAG_CMD2FPGA;	// 用于记录是否已经向FPGA发送了指令，初始值设为0，表示未发送
+	UINT SAMPLE_TIMES;		// 每个像元的采样次数
+	UINT FLAG_CMD2FPGA;		// 用于记录是否已经向FPGA发送了指令，初始值设为0，表示未发送
 
 	//	指向fits文件的指针
 	fitsfile *fits_fptr;				//	初始值设为NULL

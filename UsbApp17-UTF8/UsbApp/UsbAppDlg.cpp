@@ -1644,7 +1644,7 @@ void CUsbAppDlg::OnBnClickedButtonSend()
 	//FLAG_CMD2FPGA = 1;
 }
 
-void CUsbAppDlg::OnBnClickedButtonReceive()
+void CUsbAppDlg::OnBnClickedButtonReceive()	//与“接收数据”按钮关联
 {
 	// TODO: Add your control notification handler code here
 	//PerformBulkRecv((LPVOID)this);
