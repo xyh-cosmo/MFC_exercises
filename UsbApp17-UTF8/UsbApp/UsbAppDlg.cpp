@@ -827,37 +827,37 @@ DWORD WINAPI CUsbAppDlg::PerformBulkTransfer(LPVOID lParam)
     }
 #endif
 
-        CStringArray str;
-        int n;
+    CStringArray str;
+    int n;
 		
-        length =  pThis->SplitString(printst, ' ',  str);		//SplitString是自定义的成员函数，非MFC提供（added by XYH@20191219）
-        UCHAR *bufferOutput   = new UCHAR[length + 1];
+    length =  pThis->SplitString(printst, ' ',  str);		//SplitString是自定义的成员函数，非MFC提供（added by XYH@20191219）
+    UCHAR *bufferOutput   = new UCHAR[length + 1];
 
-	 for(int i = 0; i < length; i ++)
-	 {
+	for(int i = 0; i < length; i ++)
+	{
 	//	 AfxMessageBox((str.GetAt(i)));
-		 n = wcstol((str.GetAt(i)), NULL, 16);
+		n = wcstol((str.GetAt(i)), NULL, 16);	// convert char to (long) int
 		// if((n == 0)&&(((str.GetAt(i))!=L"0")||((str.GetAt(i))!=_T("00"))))
-		 if(n == 0)
-		 {
-		     if(((str.GetAt(i))==_T("0")) || ((str.GetAt(i))==_T("00")))
-		     {
+		if(n == 0)
+		{
+			if(((str.GetAt(i))==_T("0")) || ((str.GetAt(i))==_T("00")))
+			{
+				// nothing ...
+			}
+			else
+			{
+				AfxMessageBox(_T("Input Error!"),MB_OK);
+				return 0;
+			}
+		}
+		memset(bufferOutput+i, (BYTE)n,1);
+	}
+    //  bufferOutput[0] = 'A';
+    bufferOutput[length] = '\0';
 
-		     }
-		     else
-		     {
-                 AfxMessageBox(_T("Input Error!"),MB_OK);
-			     return 0;
-		     }
-		 }
-		 memset(bufferOutput+i, (BYTE)n,1);
-	 }
-     //  bufferOutput[0] = 'A';
-       bufferOutput[length] = '\0';
+    // TRACE("OUT\n");
 
-      // TRACE("OUT\n");
-
-       TRACE("Send: %s\n",bufferOutput);  // 这是debug用的（added by XYH@20191219）
+    TRACE("Send: %s\n",bufferOutput);  // 这是debug用的（added by XYH@20191219）
 
 //	UCHAR *pBuff = (UCHAR *)printst.GetBuffer(length);
    //   AfxMessageBox((pBuff),MB_OK);

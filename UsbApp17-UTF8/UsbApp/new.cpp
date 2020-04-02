@@ -1,7 +1,9 @@
-////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //	@2020-01-20
 //	该新建的源文件用于编写新增加的app成员函数、变量，以及一些用于测试函数
-////////////////////////////////////////////////////////////////////////
+//  TODO：把PC与FPGA交互（发送各种指令）分别写成一个个单独的成员函数，以后方便
+//	调式。
+///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "UsbApp.h"
@@ -219,16 +221,23 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 		//	1-d) 发送指令
 
 
+		//	指令发送出去之后进入等待状态，sleep500毫秒
+		Sleep(500);
+
+
 		//	2）PC收数据，解包
 		TRACE("**> waiting FPGA to send data ...\n");
 		printf("**> waiting FPGA to send data ...\n");
 		Sleep(500);
 		//PerformBulkRecv_Kernel( lParam, bufferReceived, readLength );
 
-		//	3) 
+		//	3)根据解包后的数据来判断要进行什么操作：
+		
 		
 		//	根据相关条件来判断是否终止接收数据，暂时用一个简单的计数器替代
-		if( counter >= 30 ){
+		if( counter < 30 ){
+			counter += 1;
+		} else {
 			TRACE("==> finished 10 data transfers\n");
 #if defined(_ENABLE_CONSOLE_DEBUG_)
 			printf("==> finished 10 data transfers\n");
@@ -236,8 +245,6 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 			delete[] bufferReceived;
 			break;
 		}
-		else
-			counter += 1;
 
 		TRACE("**> sleep for 0.5 secs ...\n");
 #if defined(_ENABLE_CONSOLE_DEBUG_)
