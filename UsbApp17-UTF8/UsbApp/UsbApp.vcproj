@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;D:\Workspace\Git\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;;&quot;D:\Workspace\Git\MFC_exercises\UsbApp17-UTF8\UsbApp\res\inc&quot;;&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;;&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\inc&quot;"
+				AdditionalIncludeDirectories="&quot;Z:\WorkSpace\MFC\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;;&quot;Z:\WorkSpace\MFC\UsbApp17-UTF8\UsbApp\res\inc&quot;;&quot;D:\Workspace\Git\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;;&quot;D:\Workspace\Git\MFC_exercises\UsbApp17-UTF8\UsbApp\res\inc&quot;;&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\cfitsio_MSVC_32bit_DLL_3370&quot;;&quot;Z:\WorkSpace\MFC_exercises\UsbApp17-UTF8\UsbApp\res\inc&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
