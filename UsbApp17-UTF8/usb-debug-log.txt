@@ -3,3 +3,25 @@
 a- PerformBulkRecv： 中对接收到的数据进行转换，从大端转换成小端。
 b- DisplayXferData： 测试过程中转换了Endian
 c- PerformBulkTransfer：
+
+
+
+2）CyPress的USB模块，我们实际需要使用哪些函数？
+a--PC向FPGA发送指令时用什么函数？
+
+OnBnClickedButtonSend
+	PerformBulkTransfer
+		epBulkOut->XferData(bufferOutput, length)
+
+// 选择USB设备
+CCyUSBEndPoint *epBulkOut = pThis->m_selectedUSBDevice->EndPointOf(outEpAddress);
+
+
+b--PC从FPGA接受数据时用什么函数？
+
+OnBnClickedButtonCmdread
+	CommandRead
+		epBulkOut->XferData(bufferOutput, length)
+		
+CCyUSBEndPoint *epBulkOut = pThis->m_selectedUSBDevice->EndPointOf(outEpAddress);
+

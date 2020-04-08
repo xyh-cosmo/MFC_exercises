@@ -880,6 +880,8 @@ DWORD WINAPI CUsbAppDlg::PerformBulkTransfer(LPVOID lParam)
     // Extract the endpoint addresses........
     strOutData = strOutData.Right(4);
     outEpAddress = (BYTE)wcstoul(strOutData.GetBuffer(0), &pEnd, 16);
+
+	// 选择USB设备
     CCyUSBEndPoint *epBulkOut = pThis->m_selectedUSBDevice->EndPointOf(outEpAddress);
 
 #if 1
