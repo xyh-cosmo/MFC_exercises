@@ -830,7 +830,7 @@ DWORD WINAPI CUsbAppDlg::PerformBulkTransfer(LPVOID lParam)
     CStringArray str;
     int n;
 		
-    length =  pThis->SplitString(printst, ' ',  str);		//SplitString是自定义的成员函数，非MFC提供（added by XYH@20191219）
+    length =  pThis->SplitString(printst, ' ',  str); //SplitString是自定义的成员函数，非MFC提供（added by XYH@20191219）
     UCHAR *bufferOutput   = new UCHAR[length + 1];
 
 	for(int i = 0; i < length; i ++)
@@ -1633,6 +1633,9 @@ void CUsbAppDlg::OnBnClickedCancel()
     OnCancel();
 }
 
+// =======================
+// 与“发送数据（指令）”按钮相关联
+// =======================
 void CUsbAppDlg::OnBnClickedButtonSend()
 {
 	// TODO: Add your control notification handler code here
@@ -1652,6 +1655,9 @@ void CUsbAppDlg::OnBnClickedButtonReceive()	//与“接收数据”按钮关联
 	AfxBeginThread((AFX_THREADPROC)PerformBulkRecv_Driver, (LPVOID)this);
 }
 
+// ===============================
+//	与“数据发送”对话框右侧的“数据清空”相关联
+// ===============================
 void CUsbAppDlg::OnBnClickedButtonSendclear()
 {
 	// TODO: Add your control notification handler code here
@@ -1659,6 +1665,8 @@ void CUsbAppDlg::OnBnClickedButtonSendclear()
 	//AfxMessageBox(_T("按下了清除按钮"),MB_OK); // for test only
 }
 
+
+//	与“数据接收”对话框右侧的“数据清空”相关联
 void CUsbAppDlg::OnBnClickedButtonReceiveclear()
 {
 	// TODO: Add your control notification handler code here
