@@ -6,7 +6,7 @@ c- PerformBulkTransfer：
 
 
 
-2）CyPress的USB模块，我们实际需要使用哪些函数？
+2）CyPress的USB模块，我们实际需要使用哪些函数，需要什么数据类型？UCHAR？
 a--PC向FPGA发送指令时用什么函数？
 
 OnBnClickedButtonSend

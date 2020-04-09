@@ -1635,9 +1635,8 @@ void CUsbAppDlg::OnBnClickedCancel()
     OnCancel();
 }
 
-// =======================
+
 // 与“发送数据（指令）”按钮相关联
-// =======================
 void CUsbAppDlg::OnBnClickedButtonSend()
 {
 	// TODO: Add your control notification handler code here
@@ -1649,7 +1648,8 @@ void CUsbAppDlg::OnBnClickedButtonSend()
 	//FLAG_CMD2FPGA = 1;
 }
 
-void CUsbAppDlg::OnBnClickedButtonReceive()	//与“接收数据”按钮关联
+//与“接收数据”按钮关联
+void CUsbAppDlg::OnBnClickedButtonReceive()	
 {
 	// TODO: Add your control notification handler code here
 	//PerformBulkRecv((LPVOID)this);
@@ -1657,9 +1657,8 @@ void CUsbAppDlg::OnBnClickedButtonReceive()	//与“接收数据”按钮关联
 	AfxBeginThread((AFX_THREADPROC)PerformBulkRecv_Driver, (LPVOID)this);
 }
 
-// ===============================
+
 //	与“数据发送”对话框右侧的“数据清空”相关联
-// ===============================
 void CUsbAppDlg::OnBnClickedButtonSendclear()
 {
 	// TODO: Add your control notification handler code here
