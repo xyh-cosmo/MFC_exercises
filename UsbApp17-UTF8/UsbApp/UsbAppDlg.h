@@ -70,6 +70,10 @@ private:
 	static DWORD WINAPI PerformBulkRecv_Kernel(LPVOID lParam, UCHAR *bufferReceived, long readLength);
 //	新增的“接收数据”事件函数的driver部分(by XYH @2020-01-20)
 	static DWORD WINAPI PerformBulkRecv_Driver( LPVOID lParam );
+
+//	新增的“指令初始化函数”（by XYH @2020-04-20）
+	int InitCMD_GetFirstAddress( UCHAR *cmd, long cmd_size );
+	int InitCMD_ReadyToRecvData( UCHAR *cmd, long data_size, long cmd_size );
 //	###########################################################################################
 
 	CComboBox m_cboDevices;

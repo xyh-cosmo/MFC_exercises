@@ -178,11 +178,17 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 
 	CUsbAppDlg *pThis = (CUsbAppDlg *)lParam;
 
+
 	//if( FLAG_CMD2FPGA != 1 ){
 	//	AfxMessageBox(_T("还未向FPGA发送\"数据传输\"指令！"));
 	//	return;
 	//} 
-	
+
+
+//	==============================
+//	为FITS文件开辟内存并进行初始化
+//	==============================
+
 	//	通过检查指向fits文件的指针来检查fits文件名
 	//if( fits_fptr != NULL ){
 	//	CString msg;
@@ -198,7 +204,15 @@ DWORD WINAPI CUsbAppDlg::PerformBulkRecv_Driver( LPVOID lParam ){
 	//	print_fits_error( fits_status );
 	//}
 
-	
+//	============================
+//	获取图像数据在RAM中的首地址
+//	============================
+	UCHAR *cmd_getFirstAddress = new UCHAR[];
+
+
+//	====================================
+//	声明一些临时变量，用于计数与传输数据
+//	====================================
 
 	long counter = 0;					//	临时调试所用的计数器
 	long readLength = 16*1024;			//	单次接收数据的长度（字节数？）

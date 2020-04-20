@@ -1654,6 +1654,7 @@ void CUsbAppDlg::OnBnClickedButtonReceive()
 	// TODO: Add your control notification handler code here
 	//PerformBulkRecv((LPVOID)this);
 
+	// 创建新的线程
 	AfxBeginThread((AFX_THREADPROC)PerformBulkRecv_Driver, (LPVOID)this);
 }
 

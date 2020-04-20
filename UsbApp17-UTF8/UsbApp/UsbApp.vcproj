@@ -197,6 +197,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Commands.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\lib\x86\CyAPI.lib"
 				>
 			</File>
