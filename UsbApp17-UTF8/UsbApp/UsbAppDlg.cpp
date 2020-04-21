@@ -1269,7 +1269,7 @@ DWORD WINAPI CUsbAppDlg::CommandRead(LPVOID lParam)
 
 	pThis->g_cmdreadCompeletedflag = 0;
 
-//	CMD0:7f ff ff fe
+//	CMD0:7f ff ff fe  (这里为何不是大端的写法？？？)
 	bufferOutput[0] = 0xfe;
 	bufferOutput[1] = 0xff;
 	bufferOutput[2] = 0xff;
