@@ -5,6 +5,10 @@
 #include "test_Console.h"
 #include "test_ConsoleDlg.h"
 
+#include <iostream>
+
+using namespace std;
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -162,6 +166,7 @@ void Ctest_ConsoleDlg::OnBnClickedButton1()
 	// TODO: 在此添加控件通知处理程序代码
 
 	for( int i=0; i<5; ++i){
-		printf(" i = %3d\n",i);
+		//printf(" i = %3d\n",i);
+		cout << " I = " << i << endl;
 	}
 }
